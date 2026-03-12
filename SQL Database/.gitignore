@@ -1,0 +1,6 @@
+# minimum .gitignore for your situation
+.env
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
