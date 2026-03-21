@@ -21,8 +21,9 @@ CREATE TABLE Customer_Profiles (
     cust_id INT PRIMARY KEY,
     birthday DATE,
     point_available FLOAT,
-    FOREIGN KEY (cust_id) REFERENCES Customer(cust_id)
+    FOREIGN KEY Customer_Profiles (cust_id) REFERENCES Customer(cust_id)
 ) ENGINE=InnoDB;
+
 
 -- Employee
 CREATE TABLE Employee (
@@ -71,13 +72,12 @@ CREATE TABLE Orders (
     employee_id INT,
     status VARCHAR(10),
 
-    PRIMARY KEY(order_id, order_times),
+  PRIMARY KEY(order_id),
 
     FOREIGN KEY (cust_id) REFERENCES Customer(cust_id),
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
 
 ) ENGINE=InnoDB;
-
 -- Order Items
 CREATE TABLE Order_Items (
     order_item_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -89,6 +89,11 @@ CREATE TABLE Order_Items (
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (item_id) REFERENCES Menu(item_id)
 ) ENGINE=InnoDB;
+CREATE TABLE Retail_Partners (
+    retail_partner_id INT PRIMARY KEY AUTO_INCREMENT,
+    partner_name VARCHAR(50),
+    contact VARCHAR(50)
+);
 
 -- Inventory
 CREATE TABLE Inventory (
@@ -166,7 +171,7 @@ CREATE TABLE Receipts (
     actual_quantity VARCHAR(20),
     received_date DATETIME,
 
-    FOREIGN KEY (replenish_id) REFERENCES Retail_Orders(replenish_id)
+   FOREIGN KEY (retail_partner_id) REFERENCES Retail_Partners(retail_partner_id)
 ) ENGINE=InnoDB;
 
 -- External Partners
@@ -180,19 +185,22 @@ CREATE TABLE External_Partners (
 -- External Orders
 CREATE TABLE External_Orders (
     order_id INT,
-    partner_id INT,
+    ext_partner_id INT,
     external_ref_id VARCHAR(50),
 
-    PRIMARY KEY(order_id, partner_id),
+    PRIMARY KEY(order_id, ext_partner_id),
 
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
-    FOREIGN KEY (partner_id) REFERENCES External_Partners(ext_partner_id)
+    FOREIGN KEY (ext_partner_id) REFERENCES External_Partners(ext_partner_id)
 ) ENGINE=InnoDB;
 
 
--- =========================
--- INDEX OPTIMIZATION
--- =========================
+CREATE TABLE Active_Orders (
+    order_id INT PRIMARY KEY,
+    status VARCHAR(10),
+    estimated_time VARCHAR(20),
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
 
 CREATE INDEX idx_orders_customer
 ON Orders(cust_id);
