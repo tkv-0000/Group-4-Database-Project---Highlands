@@ -1385,3 +1385,4 @@ INSERT INTO Active_Orders (order_id, status,  estimated_time ) VALUES
 (1098,'Completed',11),
 (1099,'Completed',7),
 (1100,'Completed',0);
+drop table Active_Orders;
